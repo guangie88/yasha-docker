@@ -1,0 +1,15 @@
+services:
+  - docker
+  
+script:
+- if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then
+    docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+  fi
+- docker build -t $DOCKER_USERNAME/yasha .
+after_success:
+- if [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then
+    docker push $DOCKER_USERNAME/yasha
+  fi
+branches:
+  only:
+  - master
